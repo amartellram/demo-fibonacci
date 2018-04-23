@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,18 +28,26 @@ public class FibonacciRestController {
 	@Qualifier("fibonacci")
 	private FibonacciService fibonacciProvider;
 	
+	
+	
+	
+	@RequestMapping(value = "/", method = RequestMethod.GET)
+	public String hello() {
+		return "Hello world";
+	}
+	
 	@RequestMapping(value = "/fibonacci", method = RequestMethod.GET)
 	public FibonacciNumber fibonacci(@RequestParam(value = "number", defaultValue = "0") int number) {
-		if(config.isRestEnabled()) {
+		//if(isRestEnabled) {
 			int fibonacciValue = fibonacciProvider.getNthNumber(number);
 			return new FibonacciNumber(number, fibonacciValue);
-		}else 
-			throw new UnsupportedOperationException();
+		//}else 
+			//throw new UnsupportedOperationException();
 	}
 	
 	@ExceptionHandler(UnsupportedOperationException.class)
 	public void unsupportedException(HttpServletResponse response ) throws IOException{
-		response.sendError(HttpStatus.SERVICE_UNAVAILABLE.value(), "This feature is currently unavailable");
+		response.sendError(HttpStatus.SERVICE_UNAVAILABLE.value(), "This feature is currently unavailable22");
 	}
 	
 	@ExceptionHandler(Exception.class)
